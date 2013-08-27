@@ -6,7 +6,7 @@ require 'macadmin/version'
 Gem::Specification.new do |spec|
   spec.name          = "macadmin"
   spec.version       = Macadmin::VERSION
-  spec.date          = 'Tue Aug  7 16:25:17 PDT 2012'
+  spec.date          = '2012-07-08'
   spec.authors       = ["Brian Warsing"]
   spec.email         = ['dayglojesus@gmail.com']
   spec.description   = "Libraries for performing common systems administration tasks in Mac OS X"
