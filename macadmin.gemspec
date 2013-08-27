@@ -6,13 +6,13 @@ require 'macadmin/version'
 Gem::Specification.new do |spec|
   spec.name          = "macadmin"
   spec.version       = Macadmin::VERSION
+  spec.date          = 'Tue Aug  7 16:25:17 PDT 2012'
   spec.authors       = ["Brian Warsing"]
-  spec.email         = ["bcw@sfu.ca"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.email         = ['dayglojesus@gmail.com']
+  spec.description   = "Libraries for performing common systems administration tasks in Mac OS X"
+  spec.summary       = "Ruby Mac Systems Administration Library"
+  spec.homepage      = "http://github.com/dayglojesus/rbmacadmin"
   spec.license       = "MIT"
-
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
