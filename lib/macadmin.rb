@@ -1,5 +1,5 @@
 require "macadmin/version"
 
-module Macadmin
+module MacAdmin
   # Your code goes here...
 end
