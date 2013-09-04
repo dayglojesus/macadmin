@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email         = ['dayglojesus@gmail.com']
   s.description   = "Libraries for performing common systems administration tasks in Mac OS X"
   s.summary       = "Ruby Mac Systems Administration Library"
-  s.homepage      = "http://github.com/dayglojesus/rbmacadmin"
+  s.homepage      = "http://github.com/dayglojesus/macadmin"
   s.license       = "MIT"
   s.files         = `git ls-files`.split($/)
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -23,8 +23,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'CFPropertyList'
   
-  s.add_development_dependency "bundler", "~> 1.3"
-  s.add_development_dependency "rake"
+  s.add_runtime_dependency "bundler", "~> 1.3"
+  s.add_runtime_dependency "rake"
   s.add_runtime_dependency 'CFPropertyList'
   
 end
