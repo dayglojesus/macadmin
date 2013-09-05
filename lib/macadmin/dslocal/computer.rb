@@ -6,8 +6,10 @@ module MacAdmin
     # - generates missing attributes
     # - changes are merged into the composite record
     def defaults(data)
+      mac_address = get_primary_mac_address
       defaults = {
-        'realname' => ["#{data['name'].first}"],
+        'realname'   => ["#{data['name'].first}"],
+        'en_address' => [mac_address]
       }
       super defaults.merge(data)
     end
