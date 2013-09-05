@@ -40,6 +40,13 @@ module MacAdmin
         
     end
     
+    # Get the primary ethernet's MAC address
+    # - returns String
+    def get_primary_mac_address
+      raw = %x{/sbin/ifconfig en0}
+      raw.grep(/ether/).first.split.last.chomp
+    end
+    
     # Load a PropertyList file
     # - convenience method
     # - single parameter is a path to the ProperyList file
