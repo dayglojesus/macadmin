@@ -10,6 +10,7 @@ require 'macadmin/password'
 require 'macadmin/dslocal'
 require 'macadmin/dslocal/user'
 require 'macadmin/dslocal/group'
+require 'macadmin/dslocal/computer'
 
 include MacAdmin
 include MacAdmin::Common
