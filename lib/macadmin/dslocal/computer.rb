@@ -8,7 +8,7 @@ module MacAdmin
     def defaults(data)
       mac_address = get_primary_mac_address
       defaults = {
-        'realname'   => ["#{data['name'].first}"],
+        'realname'   => ["#{data['name'].first.capitalize}"],
         'en_address' => [mac_address]
       }
       super defaults.merge(data)
