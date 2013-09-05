@@ -11,8 +11,9 @@ describe MacAdmin::Computer do
       value = subject[:generateduid].first
       UUID.valid?(value).should be_true
     end
-    its (:name) { should eq [name] }
-    its (:realname) { should eq [name] }
+    its (:name)       { should eq [name] }
+    its (:realname)   { should eq [name] }
+    its (:en_address) { should eq [name] }
   end
   
 end
