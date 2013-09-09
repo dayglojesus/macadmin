@@ -4,6 +4,12 @@ module MacAdmin
     
     MIN_GID = 501
     
+    def initialize(args)
+      @member_class = User  unless defined? @member_class
+      @group_class  = Group unless defined? @group_class
+      super args
+    end
+    
     # Examine the object's users array for "member"
     # - single param: the name of a user (String)
     def has_user?(member)
@@ -13,7 +19,7 @@ module MacAdmin
     # Add a member to the object's users array
     # - single param: the name of a user (String)
     def add_user(member)
-      user = User.new :name => member
+      user = @member_class.new :name => member
       raise unless user.exists?
       self[:users] << member
       self[:users].uniq!
@@ -28,7 +34,7 @@ module MacAdmin
     # Examine the object's groupmembers array for "member"
     # - single param: the name of a group (String)
     def has_groupmember?(member)
-      group = Group.new :name => member
+      group = @group_class.new :name => member
       return false unless group.exists?
       self[:groupmembers].member? group.generateduid.first
     end
@@ -36,7 +42,7 @@ module MacAdmin
     # Add a member to the object's groupmembers array
     # - single param: the name of a group (String)    
     def add_groupmember(member)
-      group = Group.new :name => member
+      group = @group_class.new :name => member
       raise unless group.exists?
       self[:groupmembers] << group.generateduid.first 
       self[:groupmembers].uniq!
@@ -45,7 +51,7 @@ module MacAdmin
     # Remove a member from the object's groupmembers array
     # - single param: the name of a group (String)
     def rm_groupmember(member)
-      group = Group.new :name => member
+      group = @group_class.new :name => member
       return nil unless group.exists?
       self[:groupmembers].delete group.generateduid.first
     end
