@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'fileutils'
 
 # Override the constant
+MacAdmin::SaltedSHA1.send(:remove_const, :SHADOWHASH_STORE)
 MacAdmin::SaltedSHA1::SHADOWHASH_STORE = '/private/tmp'
 
 describe MacAdmin::Password do

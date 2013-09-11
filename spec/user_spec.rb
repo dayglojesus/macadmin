@@ -9,6 +9,8 @@ describe MacAdmin::User do
     
     # Create a dslocal sandbox
     @test_dir = "/private/tmp/macadmin_user_test.#{rand(100000)}"
+    MacAdmin::DSLocalRecord.send(:remove_const, :DSLOCAL_ROOT)
+    MacAdmin::SaltedSHA1.send(:remove_const, :SHADOWHASH_STORE)
     MacAdmin::SaltedSHA1::SHADOWHASH_STORE = File.expand_path @test_dir
     MacAdmin::DSLocalRecord::DSLOCAL_ROOT  = File.expand_path @test_dir
     FileUtils.mkdir_p "#{@test_dir}/Default/groups"

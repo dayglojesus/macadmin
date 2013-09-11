@@ -5,6 +5,7 @@ describe MacAdmin::DSLocalRecord do
   before :all do
     # Create a dslocal sandbox
     @test_dir = "/private/tmp/macadmin_dslocal_test.#{rand(100000)}"
+    MacAdmin::DSLocalRecord.send(:remove_const, :DSLOCAL_ROOT)
     MacAdmin::DSLocalRecord::DSLOCAL_ROOT = File.expand_path @test_dir
     FileUtils.mkdir_p "#{@test_dir}/Default/groups"
     FileUtils.mkdir_p "#{@test_dir}/Default/users"
