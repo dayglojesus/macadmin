@@ -16,16 +16,7 @@ describe MacAdmin::Computer do
       "name"          => ["planet-express"],
       "generateduid"  => ["00000000-0000-0000-0000-000000000001"],
     }
-
-    # # Create two computer record plists that we can load
-    # nimbus = { 
-    #   "en_address"    => ["bb:bb:bb:bb:bb:bb"],
-    #   "realname"      => ["NIMBUS"],
-    #   "name"          => ["nimbus"],
-    #   "generateduid"  => ["00000000-0000-0000-0000-000000000002"],
-    # }
     
-    # [planet_express, nimbus].each do |computer|
     [planet_express].each do |computer|
       record = CFPropertyList::List.new
       record.value = CFPropertyList.guess(computer)
