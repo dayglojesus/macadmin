@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.date          = '2012-07-08'
   s.authors       = ["Brian Warsing"]
   s.email         = ['dayglojesus@gmail.com']
-  s.description   = "Libraries for performing common systems administration tasks in Mac OS X"
+  s.description   = "Gem to assist in performing common systems administration tasks in Mac OS X"
   s.summary       = "Ruby Mac Systems Administration Library"
   s.homepage      = "http://github.com/dayglojesus/macadmin"
   s.license       = "MIT"
