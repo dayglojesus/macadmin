@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This project is still very new and untested. If you want some examples of how to use it, have a look at the tests.
 
 ## Contributing
 
