@@ -12,6 +12,7 @@ require 'macadmin/dslocal/user'
 require 'macadmin/dslocal/group'
 require 'macadmin/dslocal/computer'
 require 'macadmin/dslocal/computergroup'
+require 'macadmin/dslocal/dslocalnode'
 
 include MacAdmin
 include MacAdmin::Common
