@@ -1,6 +1,6 @@
-# Macadmin
+# MacAdmin
 
-TODO: Write a gem description
+Gem to assist in performing common systems administration tasks in Mac OS X
 
 ## Installation
 
