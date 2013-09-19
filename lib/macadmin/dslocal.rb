@@ -12,6 +12,7 @@ module MacAdmin
   class DSLocalRecord < DelegateClass(Hash)
     
     include MacAdmin::Common
+    include MacAdmin::MCX
     
     # Where all the files on disk live
     DSLOCAL_ROOT = '/private/var/db/dslocal/nodes'
