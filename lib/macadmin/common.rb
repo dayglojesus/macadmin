@@ -62,10 +62,10 @@ module MacAdmin
     # - single param wait (Integer) measured in seconds
     # - default wait is 10 seconds
     def restart_directoryservice(wait=10)
-      if MAC_OS_X_PRODUCT_VERSION < 11
-        system('/usr/bin/killall DirectoryService')
-      else
+      if MAC_OS_X_PRODUCT_VERSION > 10.6
         system('/usr/bin/killall opendirectoryd')
+      else
+        system('/usr/bin/killall DirectoryService')
       end
       sleep wait
     end
