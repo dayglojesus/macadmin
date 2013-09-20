@@ -27,15 +27,15 @@ module MacAdmin
         content.each do |pref_name, pref_dict|
           state = pref_dict['state']
           enforcement = (state.eql?('always') ? 'Forced' : 'Set-Once')
-          @document['mcx_application_data'][@domain][enforcement] ||= {}
+          @document['mcx_application_data'][@domain][enforcement] ||= [{}]
           if pref_dict['upk']
-            @document['mcx_application_data'][@domain][enforcement]['mcx_union_policy_keys'] ||= []
-            @document['mcx_application_data'][@domain][enforcement]['mcx_union_policy_keys'] << pref_dict['upk']
+            @document['mcx_application_data'][@domain][enforcement][0]['mcx_union_policy_keys'] ||= []
+            @document['mcx_application_data'][@domain][enforcement][0]['mcx_union_policy_keys'] << pref_dict['upk']
           end
-          @document['mcx_application_data'][@domain][enforcement]['mcx_preference_settings'] ||= {}
-          @document['mcx_application_data'][@domain][enforcement]['mcx_preference_settings'][pref_name] = pref_dict['value']
+          @document['mcx_application_data'][@domain][enforcement][0]['mcx_preference_settings'] ||= {}
+          @document['mcx_application_data'][@domain][enforcement][0]['mcx_preference_settings'][pref_name] = pref_dict['value']
           if state.eql? 'once'
-            @document['mcx_application_data'][@domain][enforcement]['mcx_data_timestamp'] = CFPropertyList::CFDate.parse_date(Time.now.utc.xmlschema)
+            @document['mcx_application_data'][@domain][enforcement][0]['mcx_data_timestamp'] = CFPropertyList::CFDate.parse_date(Time.now.utc.xmlschema)
           end
         end
       end
@@ -75,6 +75,9 @@ module MacAdmin
     end
     
     def mcx_settings=(content, append=false)
+      mcx_flags = { 'has_mcx_settings' => true }
+      mcx_flags = mcx_flags.to_plist({:plist_format => CFPropertyList::List::FORMAT_XML, :formatted => true})
+      self['mcx_flags'] = [CFPropertyList::Blob.new(mcx_flags)]
       settings = Settings.new content
       self['mcx_settings'] = settings.domains
     end
