@@ -49,6 +49,7 @@ module MacAdmin
     def active?
       load_configuration_file
       return false if cspsearchpath.nil?
+      return false unless searchpolicy_is_custom? 
       cspsearchpath.member?(@label)
     end
     
@@ -65,6 +66,7 @@ module MacAdmin
     # Add the node to the list of searchable directory services
     def activate
       insert_node
+      set_custom_searchpolicy
       save_config
     end
     
@@ -106,13 +108,16 @@ module MacAdmin
       dslocal_node  = '/Local/Default'
       bsd_node      = '/BSD/local'
       
-      if index = cspsearchpath.index(bsd_node)
-        cspsearchpath.insert(index + 1, @label)
-      elsif index = cspsearchpath.index(dslocal_node)
-        cspsearchpath.insert(index + 1, @label)
-      else
-        cspsearchpath.unshift(@label)
+      unless self.cspsearchpath.include? @label      
+        if index = cspsearchpath.index(bsd_node)
+          cspsearchpath.insert(index + 1, @label)
+        elsif index = cspsearchpath.index(dslocal_node)
+          cspsearchpath.insert(index + 1, @label)
+        else
+          cspsearchpath.unshift(@label)
+        end
       end
+      self.cspsearchpath.uniq!
     end
     
     # Remove the node from the search path
