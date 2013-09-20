@@ -18,7 +18,7 @@ module MacAdmin
     DSLOCAL_ROOT = '/private/var/db/dslocal/nodes'
     
     # Some reader attributes for introspection and debugging
-    attr_reader   :data, :composite, :real, :file, :record
+    attr_reader   :data, :composite, :real, :file, :record, :node
     attr_accessor :file
     
     class << self
