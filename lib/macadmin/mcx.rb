@@ -1,7 +1,11 @@
 module MacAdmin
   
+  # MCX
+  # - methods and classes mixed into MacAdmin::DSLocalRecord for managing MCX policy 
   module MCX
     
+    # EmbeddedDocument
+    # - domain level MCX document suitable for storage in the record's mcx_settings array
     class EmbeddedDocument
       
       attr_reader :document
@@ -42,6 +46,8 @@ module MacAdmin
       
     end
     
+    # Settings
+    # - class representing the structure of the mcx_settings array
     class Settings
       
       attr_reader :domains
@@ -86,18 +92,22 @@ module MacAdmin
       self['mcx_settings'] = settings.domains
     end
     
+    # Show the raw content of the mcx_settings array
     def mcx_settings
       self['mcx_settings']
     end
     
+    # Pretty print the contents of the record's mcx_settings array
     def pretty_mcx
       self['mcx_settings'].collect { |doc| CGI.unescapeHTML doc }
     end
     
+    # Does the object have any MCX policy?
     def has_mcx?
       self.has_key? 'mcx_settings' and self['mcx_settings'].is_a? Array and not self['mcx_settings'].empty?
     end
     
+    # Remove all MCX policy from the object
     def mcx_delete
       self.delete('mcx_flags')
       self.delete('mcx_settings')
