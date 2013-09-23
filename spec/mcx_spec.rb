@@ -58,16 +58,16 @@ describe MacAdmin::MCX do
     
   end
   
-  describe "#mcx_settings=" do
+  describe "#mcx_import" do
     
     context "when the content is XML (String)" do
       subject { Computer.new :name => 'planet-express' }
-      it { subject.send(:mcx_settings=, @raw_xml_content).should be_an_instance_of Array }
+      it { subject.send(:mcx_import, @raw_xml_content).should be_an_instance_of Array }
     end
     
     context "when the content is a file path (String)" do
       subject { Computer.new :name => 'planet-express' }
-      it { subject.send(:mcx_settings=, @policy_as_file).should be_an_instance_of Array }
+      it { subject.send(:mcx_import, @policy_as_file).should be_an_instance_of Array }
     end
     
   end
@@ -75,7 +75,7 @@ describe MacAdmin::MCX do
   describe "#mcx_settings" do
     subject { Computer.new :name => 'planet-express' }
     it do
-      subject.send(:mcx_settings=, @raw_xml_content)
+      subject.send(:mcx_import, @raw_xml_content)
       subject.mcx_settings.should be_an_instance_of Array
     end
   end
@@ -85,7 +85,7 @@ describe MacAdmin::MCX do
     context "when the record has a valid mcx_settings attribute" do
       subject { Computer.new :name => 'planet-express' }
       it do
-        subject.send(:mcx_settings=, @raw_xml_content)
+        subject.send(:mcx_import, @raw_xml_content)
         subject.send(:has_mcx?).should be_true
       end
     end
@@ -128,7 +128,7 @@ describe MacAdmin::MCX do
     
     context "when the object has MCX attached" do
       subject { Computer.new :name => 'planet-express' }
-      before { subject.send(:mcx_settings=, @raw_xml_content) }
+      before { subject.send(:mcx_import, @raw_xml_content) }
       it do
         subject.mcx_delete.should be_true
         subject['mcx_settings'].should be_nil
