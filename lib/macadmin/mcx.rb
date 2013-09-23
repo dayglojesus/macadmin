@@ -74,11 +74,15 @@ module MacAdmin
       
     end
     
-    def mcx_settings=(content, append=false)
+    # Import MCX Content and apply it to the current object
+    # - accepts a single parameter: path to Plist file containing exported MCX policy or a string of XML content representing the MCX policy
+    # - re-formats the imported MCX for storage on the record and adds the two require attributes: mcx_flags and mcx_settings
+    # - current implmentation replaces policy wholesale (no append)
+    def mcx_import(content, append=false)
+      settings = Settings.new content
       mcx_flags = { 'has_mcx_settings' => true }
       mcx_flags = mcx_flags.to_plist({:plist_format => CFPropertyList::List::FORMAT_XML, :formatted => true})
       self['mcx_flags'] = [CFPropertyList::Blob.new(mcx_flags)]
-      settings = Settings.new content
       self['mcx_settings'] = settings.domains
     end
     
