@@ -115,6 +115,29 @@ describe MacAdmin::MCX do
     
   end
   
+  describe "#mcx_delete" do
+    
+    context "when the object has NO MCX attached" do
+      subject { Computer.new :name => 'planet-express' }
+      it do
+        subject.mcx_delete.should be_nil 
+        subject['mcx_settings'].should be_nil
+        subject['mcx_flags'].should be_nil
+      end
+    end
+    
+    context "when the object has MCX attached" do
+      subject { Computer.new :name => 'planet-express' }
+      before { subject.send(:mcx_settings=, @raw_xml_content) }
+      it do
+        subject.mcx_delete.should be_true
+        subject['mcx_settings'].should be_nil
+        subject['mcx_flags'].should be_nil
+      end
+    end
+    
+  end
+  
   after :all do
     FileUtils.rm_rf @test_dir
   end
