@@ -3,7 +3,6 @@
 require 'rubygems'
 require 'cgi'
 require 'time'
-require 'stringio'
 require 'delegate'
 require 'fileutils'
 require 'cfpropertylist'
@@ -20,15 +19,3 @@ require 'macadmin/dslocal/dslocalnode'
 
 include MacAdmin
 include MacAdmin::Common
-
-# Monkey patch a bug in CFPropertyList
-# https://github.com/ckruse/CFPropertyList/issues/22
-class Hash
-  # convert a hash to plist format
-  def to_plist(options={})
-    options[:plist_format] ||= CFPropertyList::List::FORMAT_BINARY
-    plist = CFPropertyList::List.new
-    plist.value = CFPropertyList.guess(self, options)
-    plist.to_str(options[:plist_format], options)
-  end
-end
