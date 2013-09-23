@@ -94,6 +94,11 @@ module MacAdmin
       self.has_key? 'mcx_settings' and self['mcx_settings'].is_a? Array and not self['mcx_settings'].empty?
     end
     
+    def mcx_delete
+      self.delete('mcx_flags')
+      self.delete('mcx_settings')
+    end
+    
   end
   
 end
