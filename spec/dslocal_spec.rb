@@ -147,11 +147,14 @@ RECORD
     end
     
     context "with a path parameter" do
+      mode = 33152
       path = "/private/tmp/group-create-method-test.plist"
       subject { DSLocalRecord.new :name => 'leela', :uid => "609" }
       it 'saves the record to disk on the path specified' do
         subject.create(path).should be_true
+        stat = File::Stat.new path
         File.exists?(path).should be_true
+        stat.mode.should eq mode
       end
       after do
         FileUtils.rm_rf path
