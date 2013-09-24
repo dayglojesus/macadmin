@@ -68,6 +68,7 @@ module MacAdmin
       plist = CFPropertyList::List.new
       plist.value = CFPropertyList.guess(out)
       plist.save(file, CFPropertyList::List::FORMAT_BINARY)
+      FileUtils.chmod(0600, file)
     end
     
     # Delete the record
