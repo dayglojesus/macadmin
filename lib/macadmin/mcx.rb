@@ -196,17 +196,14 @@ module MacAdmin
       self['mcx_flags'] = [CFPropertyList::Blob.new(mcx_flags)]
       self['mcx_settings'] = settings.domains
     end
+    alias :mcximport :mcx_import
     
     # Export the MCX preferences for the record
     def mcx_export
       doc = Policy.new self['mcx_settings']
       doc.to_plist
     end
-    
-    # Show the raw content of the mcx_settings array
-    def mcx_settings
-      self['mcx_settings']
-    end
+    alias :mcxexport :mcx_export
     
     # Pretty print the contents of the record's mcx_settings array
     def pretty_mcx
@@ -223,6 +220,7 @@ module MacAdmin
       self.delete('mcx_flags')
       self.delete('mcx_settings')
     end
+    alias :mcxdelete :mcx_delete
     
   end
   
