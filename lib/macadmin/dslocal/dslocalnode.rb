@@ -48,6 +48,14 @@ module MacAdmin
     # Test whether or not the node is in the search path
     def active?
       load_configuration_file
+      if self.name.eql? 'Default'
+        case policy = self.searchpolicy
+        when Integer
+          return true if policy < 3
+        else
+          return true if policy =~ /\AdsAttrTypeStandard:[LN]SPSearchPath\z/
+        end
+      end
       return false if cspsearchpath.nil?
       return false unless searchpolicy_is_custom? 
       cspsearchpath.member?(@label)
