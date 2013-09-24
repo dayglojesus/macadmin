@@ -80,14 +80,6 @@ describe MacAdmin::MCX do
     end
   end
   
-  describe "#mcx_settings" do
-    subject { Computer.new :name => 'planet-express' }
-    it do
-      subject.send(:mcx_import, @raw_xml_content)
-      subject.mcx_settings.should be_an_instance_of Array
-    end
-  end
-  
   describe '#has_mcx?' do
     
     context "when the record has a valid mcx_settings attribute" do
