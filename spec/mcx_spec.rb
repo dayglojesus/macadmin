@@ -72,6 +72,14 @@ describe MacAdmin::MCX do
     
   end
   
+  describe "#mcx_export" do
+    subject { Computer.new :name => 'planet-express' }
+    it "should return a valid String" do
+      subject.mcx_import @raw_xml_content
+      subject.mcx_export.should be_an_instance_of String
+    end
+  end
+  
   describe "#mcx_settings" do
     subject { Computer.new :name => 'planet-express' }
     it do
