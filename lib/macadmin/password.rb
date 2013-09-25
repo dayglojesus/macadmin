@@ -1,9 +1,12 @@
 module MacAdmin
-
+  
+  # Custom error
   class PasswordError < StandardError
     UNSUPPORTED_OBJECT_ERR = 'Unsupported object: cannot store ShadowHashData'
   end
-
+  
+  # Password (super class)
+  # - common methods for password sub-classes
   class Password
     
     attr_reader :label
@@ -47,11 +50,11 @@ module MacAdmin
       
     end # end self
     
-    private
-    
-    
   end
   
+  # Legacy Passwords
+  # - password management for Mac OS X 10.6 and below
+  # - passwords are managed in separate files in /var/db/shadow/hash
   class SaltedSHA1 < Password
     
     SHADOWHASH_STORE = '/private/var/db/shadow/hash'
@@ -140,6 +143,9 @@ module MacAdmin
     
   end
   
+  # Lion Passwords
+  # - Mac OS X 10.7 store passwords as Salted SHA512 hashes
+  # - hash is stored directly in the user's plist
   class SaltedSHA512 < Password
     
     LABEL = 'SALTED-SHA512'
@@ -195,6 +201,9 @@ module MacAdmin
     
   end
   
+  # Current Password Scheme
+  # - Mac OS X 10.8 and up store passwords as Salted SHA512-PBKDF2 hashes
+  # - hash is stored directly in the user's plist
   class SaltedSHA512PBKDF2 < Password
     
     LABEL = 'SALTED-SHA512-PBKDF2'
