@@ -10,12 +10,14 @@ describe MacAdmin::DSLocalNode do
     # Create a dslocal sandbox
     @test_dir = "/private/tmp/macadmin_dslocalnode_test.#{rand(100000)}"
     @child_dirs = ['aliases', 'computer_lists', 'computergroups', 'computers', 'config', 'groups', 'networks', 'users']
+    MacAdmin::DSLocalNode.send(:remove_const, :SANDBOX_FILE)
     MacAdmin::DSLocalNode.send(:remove_const, :DSLOCAL_ROOT)
     MacAdmin::DSLocalNode.send(:remove_const, :PREFERENCES)
     MacAdmin::DSLocalNode.send(:remove_const, :PREFERENCES_LEGACY)
     MacAdmin::DSLocalNode.send(:remove_const, :OWNER)
     MacAdmin::DSLocalNode.send(:remove_const, :GROUP)
     MacAdmin::DSLocalNode::DSLOCAL_ROOT       = File.expand_path @test_dir
+    MacAdmin::DSLocalNode::SANDBOX_FILE       = File.expand_path "#{@test_dir}/opendirectoryd.sb"
     MacAdmin::DSLocalNode::PREFERENCES        = File.expand_path "#{@test_dir}/config.plist"
     MacAdmin::DSLocalNode::PREFERENCES_LEGACY = File.expand_path "#{@test_dir}/legacy.plist"
     MacAdmin::DSLocalNode::OWNER = this_uid
@@ -104,14 +106,112 @@ describe MacAdmin::DSLocalNode do
 </plist>
     CONFIG
     
+    @sandbox = <<-SANDBOX
+    ;; Copyright (c) 2011 Apple Inc.  All Rights reserved.
+    ;;
+    ;; WARNING: The sandbox rules in this file currently constitute
+    ;; Apple System Private Interface and are subject to change at any time and
+    ;; without notice.
+    ;;
+
+    (version 1)
+
+    (allow default)
+
+    ;; deny lookup to coreservicesd to avoid deadlocks
+    (deny mach-lookup
+        (global-name "com.apple.CoreServices.coreservicesd")
+        (with no-log)
+        (with no-callout)
+    )
+
+    ;; we don't allow inbound or bound ports
+    (deny network-inbound (with no-callout))
+    (deny network-bind (with no-callout))
+
+    (allow network-inbound (local udp))
+    (allow network-bind (local ip))
+
+    ;; deny all file writes except those explicity allowed
+    (deny file-write* (with no-callout))
+
+    (allow process-exec (literal "/usr/bin/nsupdate"))
+
+    ;; allow slapconfig to be launched without sandbox due to denial of file-write
+    (allow process-exec (literal "/usr/sbin/slapconfig") (with no-sandbox))
+
+    ;; 10735867
+    (allow process-exec (literal "/usr/sbin/kextcache") (with no-sandbox))
+
+    ;; restrict where we write
+    (allow file-write*
+        ;; key OpenDirectory files
+        (mount-relative-regex 
+            ;; our database and shadowhash files
+            ;; we might be targeting '/' or some other volume
+            #"^(/private)?/var/db/dslocal/nodes/Default(/|$)"
+            #"^(/private)?/var/db/dslocal/nodes/Earth(/|$)"
+            #"^(/private)?/var/db/dslocal/nodes/MCX(/|$)"
+            #"^(/private)?/var/db/shadow(/|$)"
+        )
+
+        (regex 
+            ;; configuration files
+            ;; we ignore DirectoryService files because they are handled by dspluginhelperd
+            #"^/Library/Preferences/OpenDirectory"
+
+            ;; our log files
+            #"^(/private)?/var/log/opendirectoryd.log"
+
+            ;; configuration files
+            #"^/Library/Preferences/SystemConfiguration/"
+        )
+
+        ;; our SystemCache related files
+        (regex 
+            #"^(/private)?/etc/memberd.conf"	;;; for unlinking
+        )
+
+        ;; update system keychain
+        (regex 
+            #"^/Library/Keychains/System.keychain"
+            #"^/Library/Keychains/\."
+            #"^(/private)?/var/db/mds/system/mds.lock$"
+        )
+
+        ;; kerberos keytab updates
+        (regex 
+            #"^(/private)?/etc/krb5.keytab$"
+            #"^(/private)?/tmp/krb5cc_"
+        )
+
+        ;; additional required
+        (literal "/dev/dtracehelper")
+        (literal "/dev/null")
+        (literal "/dev/random")
+
+        ;; for NIS support
+        (regex 
+            #"^(/private)?/var/yp/"
+            #"^(/private)?/etc/defaultdomain$"
+        )
+    )
+
+    SANDBOX
+    
     File.open(MacAdmin::DSLocalNode::PREFERENCES, 'w')        { |f| f.write(@config) }
     File.open(MacAdmin::DSLocalNode::PREFERENCES_LEGACY, 'w') { |f| f.write(@legacy) }
     
   end
   
+  before :each do
+    File.open(MacAdmin::DSLocalNode::SANDBOX_FILE, 'w') { |f| f.write(@sandbox) }
+  end
+  
   after :each do
     if subject.name.eql? 'Earth'
       FileUtils.rm_rf subject.root if File.exists? subject.root
+      FileUtils.rm_rf MacAdmin::DSLocalNode::SANDBOX_FILE if File.exists? MacAdmin::DSLocalNode::SANDBOX_FILE
     end
   end
   
@@ -187,6 +287,7 @@ describe MacAdmin::DSLocalNode do
     
     subject { DSLocalNode.new 'Earth' }
     it "removes the node from the Directory Service's search path" do
+      subject.activate
       subject.deactivate.should be_true
       subject.active?.should be_false
     end
