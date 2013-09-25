@@ -7,6 +7,7 @@ module MacAdmin
     
     require 'find'
     
+    SANDBOX_FILE       = '/System/Library/Sandbox/Profiles/com.apple.opendirectoryd.sb'
     PREFERENCES        = '/Library/Preferences/OpenDirectory/Configurations/Search.plist'
     PREFERENCES_LEGACY = '/Library/Preferences/DirectoryService/SearchNodeConfig.plist'
     CHILD_DIRS         = ['aliases', 'computer_lists', 'computergroups', 'computers', 'config', 'groups', 'networks', 'users']
@@ -47,6 +48,9 @@ module MacAdmin
     
     # Test whether or not the node is in the search path
     def active?
+      if needs_sandbox?
+        return false unless sandbox_active?
+      end
       load_configuration_file
       if self.name.eql? 'Default'
         case policy = self.searchpolicy
@@ -57,7 +61,7 @@ module MacAdmin
         end
       end
       return false if cspsearchpath.nil?
-      return false unless searchpolicy_is_custom? 
+      return false unless searchpolicy_is_custom?
       cspsearchpath.member?(@label)
     end
     
@@ -73,6 +77,7 @@ module MacAdmin
     
     # Add the node to the list of searchable directory services
     def activate
+      activate_sandbox if needs_sandbox?
       insert_node
       set_custom_searchpolicy
       save_config
@@ -80,6 +85,7 @@ module MacAdmin
     
     # Remove the node to the list of searchable directory services
     def deactivate
+      deactivate_sandbox if needs_sandbox?
       remove_node
       save_config
     end
@@ -109,7 +115,51 @@ module MacAdmin
     end
     
     private
-        
+    
+    # Does this platform require a sandbox configuration?
+    def needs_sandbox?
+      MAC_OS_X_PRODUCT_VERSION > 10.7
+    end
+    
+    # Produces a Regex for matching the OpenDirectory sandbox's "allow file-write" rules
+    def sb_regex(name = 'Default')
+      exemplar = %Q{#"^(/private)?/var/db/dslocal/nodes/Default(/|$)"}
+      pattern = name.eql?('Default') ? name : exemplar.sub(/Default/, name)
+      pattern = Regexp.escape pattern
+      Regexp.new pattern.gsub /\//,'\\/'
+    end
+    
+    # Is the there an active sandbox for the node?
+    def sandbox_active?
+      if File.exists? SANDBOX_FILE
+        @sandbox = File.readlines(SANDBOX_FILE)
+        @sandbox.each { |line| return true if line.match sb_regex(@name) } 
+      end
+      false
+    end
+    
+    # Activate the node's sandbox
+    def activate_sandbox
+      unless sandbox_active?
+        @sandbox.each_with_index do |line, index|
+          if line.match sb_regex
+            @sandbox.insert index + 1, line.sub(/Default/, @name)
+          end
+        end
+        File.open(SANDBOX_FILE, 'w') { |f| f << @sandbox } 
+      end
+    end
+    
+    # De-activate the node's sandbox
+    def deactivate_sandbox
+      if sandbox_active?
+        @sandbox.delete_if do |line|
+          line.match sb_regex @name
+        end
+        File.open(SANDBOX_FILE, 'w') { |f| f << @sandbox } 
+      end
+    end
+    
     # Insert the node into the search path immediately after any builtin local nodes
     def insert_node
       self.cspsearchpath ||= []
