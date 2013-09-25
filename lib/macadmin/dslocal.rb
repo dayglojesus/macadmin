@@ -157,7 +157,7 @@ module MacAdmin
       # If there's only a single arg, and it's a String, make it the :name attrib
       input  = input.is_a?(String) ? { 'name' => input } : input
       result = input.inject({}){ |memo,(k,v)| memo[k.to_s] = [v.to_s]; memo }
-      raise DSLocalError.new(name_error) unless result['name'].first.match /^[a-z0-9][a-z0-9_-]*$/
+      raise DSLocalError.new(name_error) unless result['name'].first.match /^[_a-z0-9][a-z0-9_-]*$/
       result
     end
     
