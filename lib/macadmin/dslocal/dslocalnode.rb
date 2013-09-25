@@ -3,6 +3,10 @@ module MacAdmin
   class DSLocalNodeError < StandardError
   end
   
+  # DSLocalNode
+  # - constructs and manages Local OpenDirectory nodes
+  # - takes one parameter: name
+  # - if no name param is passed, 'Default' node is used
   class DSLocalNode
     
     require 'find'
@@ -27,16 +31,19 @@ module MacAdmin
       self
     end
     
+    # Compound method: create and then activate the node
     def create_and_activate
       create
       activate
     end
     
+    # Compound method: destroy and then deactivate the node
     def destroy_and_deactivate
       destroy
       deactivate
     end
     
+    # Compound method: does the node exist and is it active?
     def exists_and_active?
       exists? and active?
     end
@@ -47,6 +54,7 @@ module MacAdmin
     end
     
     # Test whether or not the node is in the search path
+    # - also: test the sandbox configuration if required
     def active?
       if needs_sandbox?
         return false unless sandbox_active?
@@ -76,6 +84,7 @@ module MacAdmin
     end
     
     # Add the node to the list of searchable directory services
+    # - also: add a sandbox configuration if required
     def activate
       activate_sandbox if needs_sandbox?
       insert_node
@@ -84,6 +93,7 @@ module MacAdmin
     end
     
     # Remove the node to the list of searchable directory services
+    # - also: remove a sandbox configuration if required
     def deactivate
       deactivate_sandbox if needs_sandbox?
       remove_node
