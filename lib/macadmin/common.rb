@@ -44,7 +44,7 @@ module MacAdmin
     # - returns String
     def get_primary_mac_address
       raw = %x{/sbin/ifconfig en0}
-      raw.grep(/ether/).first.split.last.chomp
+      raw.split("\n").grep(/ether/).first.split.last
     end
     
     # Load a PropertyList file
