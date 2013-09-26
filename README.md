@@ -6,9 +6,9 @@ Gem to assist in performing common systems administration tasks in OSX
 
 ## About
 
-MacAdmin endeavors to provide an OO programming interface for constituent OSX system resources. It comprises a series of classes based on Ruby's ability to parse and manipulate Apple Property Lists (CFPropertyList) as native Ruby objects. MacAdmin classes operate by directly manipulating the Property Lists used to abstract OSX system resources -- bypassing the common utilities and APIs normally reserved for this kind of work.
+MacAdmin endeavors to provide an OO programming interface for constituent OSX system resources. It's comprised of classes with the ability to parse Apple Property Lists (CFPropertyList) and manipulate them as native Ruby objects. The classes work directly with the Property Lists used to abstract OSX system resources -- users, groups, computers, computergroups, etc. -- bypassing the common utilities and APIs normally reserved for this kind of work.
 
-This approach has trade-offs, but it does result in a very powerful and simple model for managing these resources (see Notes).
+This approach has trade-offs, but it does result in a very powerful and simple model for managing these resources (See Notes).
 
 #### Notes:
 
@@ -16,7 +16,7 @@ Before forking/cloning/using/testing/etc MacAdmin, please read the license (LICE
 
 One important trade-off worth mentioning when using this gem is that you must have root priviledge in order to access (read) any resources in the DSLocal domains or similarily protected directories and files. This is different from using utils like `dscl`, but not unlike using `defaults`. Naturally, as with any of these methods, you must also be root in order to make any changes. The code examples below will require root access when performing create operations.
 
-Another important condition to mention when using MacAdmin is that it will often be necessary to restart OSX's directory service in order to see the changes you've made to any of the affected plists. This can be bothersome and susceptible to race conditions, but in general, it is manageable.
+Another important condition to mention is that it will often be necessary to restart OSX's directory service in order to see the changes you've made to any of the affected plists. This can be bothersome and susceptible to race conditions, but in general, it's a manageable issue.
 
 ## Requirements
 
