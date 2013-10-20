@@ -291,7 +291,7 @@ module MacAdmin
     def format(hash)
       hash.inject({}) do |memo, (key, value)|
         if key.to_s.eql? 'iterations'
-          value = value.to_s
+          value = value.to_i
         else
           value = Password.convert_to_blob value
         end
