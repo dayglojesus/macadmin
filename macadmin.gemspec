@@ -16,15 +16,20 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($/)
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
-  s.require_paths = ["lib"]
-
+  s.require_paths = ["lib", "ext"]
+  s.extensions    = Dir['ext/**/extconf.rb']
+  
+  s.platform = Gem::Platform::RUBY
+  
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rake"
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'CFPropertyList'
+  s.add_development_dependency "rake-compiler"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "CFPropertyList"
   
   s.add_runtime_dependency "bundler", "~> 1.3"
   s.add_runtime_dependency "rake"
-  s.add_runtime_dependency 'CFPropertyList'
+  s.add_runtime_dependency "rake-compiler"
+  s.add_runtime_dependency "CFPropertyList"
   
 end
