@@ -1,5 +1,7 @@
 module MacAdmin
   
+  # Common
+  # - module comtaining classes and methods common to macadmin
   module Common
     
     extend self
