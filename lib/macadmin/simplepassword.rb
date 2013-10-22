@@ -1,5 +1,7 @@
 module MacAdmin
   
+  # SimplePassword
+  # - module containing methods for converting a plain String into Mac OS X password hash
   module SimplePassword
     
     require 'openssl'
