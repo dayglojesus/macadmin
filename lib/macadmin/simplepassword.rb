@@ -47,10 +47,9 @@ module MacAdmin
     # - returns: SaltedSHA512PBKDF2 or SaltedSHA512 or SaltedSHA1 depending on platform
     def apropos(password)
       platform = MacAdmin::Common::MAC_OS_X_PRODUCT_VERSION
-      case platform
-      when platform >= 10.8
+      if platform >= 10.8
         return salted_sha512_pbkdf2 password
-      when platform == 10.7
+      elsif platform == 10.7
         return salted_sha512 password
       else
         return salted_sha1 password
