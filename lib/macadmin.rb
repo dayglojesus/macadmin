@@ -1,4 +1,4 @@
-# macadmin, version 0.0.1
+# macadmin gem
 # Sat Aug 11 16:14:56 PDT 2012
 require 'rubygems'
 require 'cgi'
