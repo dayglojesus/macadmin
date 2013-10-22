@@ -43,7 +43,7 @@ static VALUE salted_sha512_pbkdf2_from_string(VALUE self, VALUE input) {
     
     VALUE str = StringValue(input);
     char *password = RSTRING_PTR(str);   // may be null
-    size_t password_size = RSTRING(str)->len;
+    size_t password_size = RSTRING_LEN(str);
     int salt_len = 32;
     
     // Calc how many iterations
