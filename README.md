@@ -21,6 +21,7 @@ Another important condition to mention is that it will often be necessary to res
 ## Requirements
 
 - Mac OS X 10.5 and up
+- Xcode Command Line Tools
 - RubyGems: there are a few gem dependencies but they should be handled by bundler
 
 ## Installation
