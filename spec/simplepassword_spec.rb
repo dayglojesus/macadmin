@@ -19,4 +19,22 @@ describe MacAdmin::SimplePassword do
     
   end
   
+  describe "#salted_sha512" do
+    it "should return a SaltedSHA512 object" do
+      MacAdmin::SimplePassword.salted_sha512('').should be_an_instance_of SaltedSHA512
+    end
+  end
+  
+  describe "#salted_sha1" do
+    it "should return a SaltedSHA1 object" do
+      MacAdmin::SimplePassword.salted_sha1('').should be_an_instance_of SaltedSHA1
+    end
+  end
+
+  describe "#apropos" do
+    it "should return a Password object" do
+      MacAdmin::SimplePassword.salted_sha1('').should be_an_instance_of SaltedSHA1 or SaltedSHA512 or SaltedSHA512PBKDF2
+    end
+  end
+  
 end
