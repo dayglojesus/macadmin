@@ -2,7 +2,7 @@
 
 Gem to assist in performing common systems administration tasks in OSX
 
-## Version: 0.0.1
+## Version: 0.0.2
 
 ## About
 
@@ -125,7 +125,9 @@ Create a computer group, add the computer record as a member, and apply some pol
 
 Create an administrator for your new node:
 
-    administrator = User.new :name => 'mcxadmin', :gid => 80, :node => 'MCX'
+    # Generate a platform appropriate password from a plaintext string
+    password = SimplePassword.apropos "secret_passphrase"
+    administrator = User.new :name => 'mcxadmin', :password => password, :gid => 80, :node => 'MCX'
     administrator.create
 
 Restart the directory services to seal the deal:
