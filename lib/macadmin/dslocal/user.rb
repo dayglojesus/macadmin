@@ -1,5 +1,8 @@
 module MacAdmin
   
+  # User
+  # - creates and manages Mac OS X User accounts
+  # - params: :name, :realname, :password, :uid, :gid, :shell, :home, :comment
   class User < DSLocalRecord
     
     MIN_UID = 501

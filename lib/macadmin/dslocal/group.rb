@@ -1,5 +1,8 @@
 module MacAdmin
   
+  # Group
+  # - creates and manages Mac OS X User Groups
+  # - params: :name, :realname, :gid
   class Group < DSLocalRecord
     
     MIN_GID = 501

@@ -1,5 +1,9 @@
 module MacAdmin
   
+  # ComputerGroup
+  # - creates and manages AMC OS X Computer Groups
+  # - inherits from MacAdmin::Group
+  # - params: :name, :realname, :gid
   class ComputerGroup < Group
     
     MIN_GID = 501

@@ -1,5 +1,8 @@
 module MacAdmin
   
+  # Computer
+  # - creates and manages Mac OS X Computer records
+  # - params: :name, :realname, :en_address
   class Computer < DSLocalRecord
     
     # Handle required but unspecified record attributes
