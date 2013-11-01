@@ -1,6 +1,6 @@
 //
 //  crypto.c
-//  MacAdmin::SimplePassword::Crypto
+//  MacAdmin::Password::Crypto
 //  - Ruby C extension built for fast PBKDF2 calculation
 //
 //  Created by Brian Warsing on 2013-10-07.
@@ -13,7 +13,7 @@
 #include "ruby.h"
 
 VALUE MacAdmin       = Qnil;
-VALUE SimplePassword = Qnil;
+VALUE Password = Qnil;
 
 // Prototypes
 void Init_crypto();
@@ -30,9 +30,9 @@ void to_hex( uint8_t *dest, const uint8_t *text, size_t text_size )
 
 // Ruby Init
 void Init_crypto() {
-    MacAdmin       = rb_define_module("MacAdmin");
-    SimplePassword = rb_define_module_under(MacAdmin, "SimplePassword");
-    rb_define_singleton_method(SimplePassword, "salted_sha512_pbkdf2_from_string", salted_sha512_pbkdf2_from_string, 1);
+    MacAdmin = rb_define_module("MacAdmin");
+    Password = rb_define_module_under(MacAdmin, "Password");
+    rb_define_singleton_method(Password, "salted_sha512_pbkdf2_from_string", salted_sha512_pbkdf2_from_string, 1);
 }
 
 // salted_sha512_pbkdf2_from_string

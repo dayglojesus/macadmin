@@ -1,8 +1,8 @@
 module MacAdmin
   
-  # SimplePassword
+  # Password
   # - module containing methods for converting a plain String into Mac OS X password hash
-  module SimplePassword
+  module Password
     
     require 'openssl'
     require 'securerandom'
@@ -12,7 +12,7 @@ module MacAdmin
     # This method is only available in Mountain Lion or better
     if MacAdmin::Common::MAC_OS_X_PRODUCT_VERSION > 10.7
       
-      require "macadmin/simplepassword/crypto"
+      require "macadmin/password/crypto"
       
       # Creates a SaltedSHA512PBKDF2 password from String
       # - single param: String
