@@ -1,20 +1,20 @@
 module MacAdmin
   
   # Custom error
-  class PasswordError < StandardError
+  class ShadowHashError < StandardError
     UNSUPPORTED_OBJECT_ERR = 'Unsupported object: cannot store ShadowHashData'
   end
   
-  # Password (super class)
+  # ShadowHash (super class)
   # - common methods for password sub-classes
-  class Password
+  class ShadowHash
     
     attr_reader :label
     
     class << self
       
       # Reads the password data from the user record
-      # - returns an appropriate Password object
+      # - returns an appropriate ShadowHash object
       def create_from_user_record(user)
         if user['ShadowHashData']
           password = read_shadowhashdata(user['ShadowHashData'])
@@ -52,10 +52,10 @@ module MacAdmin
     
   end
   
-  # Legacy Passwords
+  # Legacy ShadowHashs
   # - password management for Mac OS X 10.6 and below
   # - passwords are managed in separate files in /var/db/shadow/hash
-  class SaltedSHA1 < Password
+  class SaltedSHA1 < ShadowHash
     
     SHADOWHASH_STORE = '/private/var/db/shadow/hash'
     
@@ -79,7 +79,7 @@ module MacAdmin
       
     end
     
-    # Initializes a SaltedSHA512 Password object from string
+    # Initializes a SaltedSHA512 ShadowHash object from string
     # - string param should be a hex string, 24 bytes
     def initialize(string)
       @hash = validate(string)
@@ -93,12 +93,12 @@ module MacAdmin
       string
     end
     
-    # Return a String representation of the Password data
+    # Return a String representation of the ShadowHash data
     def password
       @hash.to_s
     end
     
-    # Return the Password as a Salted SHA1 String
+    # Return the ShadowHash as a Salted SHA1 String
     def data
       @data ||= @hash.to_s
     end
@@ -110,7 +110,7 @@ module MacAdmin
     # - SHA1 passwords are not stored as part of the User object
     # - They're stored in separate files on disk
     def store(sender)
-      raise PasswordError.new(PasswordError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
+      raise ShadowHashError.new(ShadowHashError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
       @data = @hash.to_s
     end
     
@@ -118,7 +118,7 @@ module MacAdmin
     # - success based on the length of the file, must be 1240 bytes
     # - returns boolean
     def write_to_shadowhash_file(sender)
-      raise PasswordError.new(PasswordError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
+      raise ShadowHashError.new(ShadowHashError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
       path = "#{SHADOWHASH_STORE}/#{sender[:generateduid].first}"
       file = File.open(path, mode='w+')
       content = file.read
@@ -134,7 +134,7 @@ module MacAdmin
     # Remove the ShadowHash file associated with the sender
     # - returns boolean
     def remove_shadowhash_file(sender)
-      raise PasswordError.new(PasswordError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
+      raise ShadowHashError.new(ShadowHashError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
       path = "#{SHADOWHASH_STORE}/#{sender[:generateduid].first}"
       FileUtils.rm path if File.exists? path
       !File.exists? path
@@ -143,10 +143,10 @@ module MacAdmin
     
   end
   
-  # Lion Passwords
+  # Lion ShadowHashs
   # - Mac OS X 10.7 store passwords as Salted SHA512 hashes
   # - hash is stored directly in the user's plist
-  class SaltedSHA512 < Password
+  class SaltedSHA512 < ShadowHash
     
     LABEL = 'SALTED-SHA512'
     
@@ -154,7 +154,7 @@ module MacAdmin
     
     class << self
       
-      # Constructs a SaltedSHA512 Password object from ShadowHashData
+      # Constructs a SaltedSHA512 ShadowHash object from ShadowHashData
       # - param is raw ShadowHashData object
       def create_from_shadowhashdata(data)
         value = data[SaltedSHA512::LABEL].to_s
@@ -164,7 +164,7 @@ module MacAdmin
       
     end
     
-    # Initializes a SaltedSHA512 Password object from string
+    # Initializes a SaltedSHA512 ShadowHash object from string
     # - string param should be a hex string, 68 bytes
     def initialize(string)
       @label = LABEL
@@ -179,13 +179,13 @@ module MacAdmin
       string
     end
     
-    # Return the Password as a ShadowHashData object
+    # Return the ShadowHash as a ShadowHashData object
     # - Binary Plist
     def data
-      @data ||= { @label => Password.convert_to_blob(@hash) }.to_plist
+      @data ||= { @label => ShadowHash.convert_to_blob(@hash) }.to_plist
     end
     
-    # Return a Hash representation of the Password data
+    # Return a Hash representation of the ShadowHash data
     def password
       { @label => @hash }
     end
@@ -194,23 +194,23 @@ module MacAdmin
     
     # Pseudo callback for inserting a ShadowHashData object into the User object
     def store(sender)
-      raise PasswordError.new(PasswordError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
-      @data = { @label => Password.convert_to_blob(@hash) }.to_plist
+      raise ShadowHashError.new(ShadowHashError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
+      @data = { @label => ShadowHash.convert_to_blob(@hash) }.to_plist
       sender['ShadowHashData'] = [@data]
     end
     
   end
   
-  # Current Password Scheme
+  # Current ShadowHash Scheme
   # - Mac OS X 10.8 and up store passwords as Salted SHA512-PBKDF2 hashes
   # - hash is stored directly in the user's plist
-  class SaltedSHA512PBKDF2 < Password
+  class SaltedSHA512PBKDF2 < ShadowHash
     
     LABEL = 'SALTED-SHA512-PBKDF2'
     
     class << self
       
-      # Constructs a SaltedSHA512PBKDF2 Password object from ShadowHashData
+      # Constructs a SaltedSHA512PBKDF2 ShadowHash object from ShadowHashData
       # - param is raw ShadowHashData object
       def create_from_shadowhashdata(data)
         hash = data[SaltedSHA512PBKDF2::LABEL]
@@ -228,7 +228,7 @@ module MacAdmin
       
     end
     
-    # Initializes a SaltedSHA512PBKDF2 Password object from Hash or Array
+    # Initializes a SaltedSHA512PBKDF2 ShadowHash object from Hash or Array
     # - if passing an array, you must order the elements: entropy, salt, iterations
     # - pass a Hash with keys: entropy, salt, iterations
     def initialize(args)
@@ -267,13 +267,13 @@ module MacAdmin
       hash
     end
     
-    # Return the Password as a ShadowHashData object
+    # Return the ShadowHash as a ShadowHashData object
     # - Binary Plist
     def data
       @data ||= { @label => format(@hash) }.to_plist
     end
     
-    # Return a Hash representation of the Password data
+    # Return a Hash representation of the ShadowHash data
     def password
       { @label => @hash }
     end
@@ -282,7 +282,7 @@ module MacAdmin
 
     # Pseudo callback for inserting a ShadowHashData object into the User object
     def store(sender)
-      raise PasswordError.new(PasswordError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
+      raise ShadowHashError.new(ShadowHashError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
       @data = { @label => format(@hash) }.to_plist
       sender['ShadowHashData'] = [@data]
     end
@@ -293,7 +293,7 @@ module MacAdmin
         if key.to_s.eql? 'iterations'
           value = value.to_i
         else
-          value = Password.convert_to_blob value
+          value = ShadowHash.convert_to_blob value
         end
         memo[key.to_s] = value
         memo

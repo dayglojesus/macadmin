@@ -30,7 +30,7 @@ module MacAdmin
     def salted_sha512(password)
       salt = SecureRandom.random_bytes(4)
       hash = Digest::SHA512.hexdigest(salt + password)
-      SaltedSHA512.new(MacAdmin::Password.convert_to_hex(salt) + hash)
+      SaltedSHA512.new(MacAdmin::ShadowHash.convert_to_hex(salt) + hash)
     end
     
     # Creates a SaltedSHA1 password from String
@@ -39,7 +39,7 @@ module MacAdmin
     def salted_sha1(password)
       salt = SecureRandom.random_bytes(4)
       hash = Digest::SHA1.hexdigest(salt + password)
-      SaltedSHA1.new((MacAdmin::Password.convert_to_hex(salt) + hash).upcase)
+      SaltedSHA1.new((MacAdmin::ShadowHash.convert_to_hex(salt) + hash).upcase)
     end
     
     # Create a platform appropriate password

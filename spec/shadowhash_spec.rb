@@ -5,7 +5,7 @@ require 'fileutils'
 MacAdmin::SaltedSHA1.send(:remove_const, :SHADOWHASH_STORE)
 MacAdmin::SaltedSHA1::SHADOWHASH_STORE = '/private/tmp'
 
-describe MacAdmin::Password do
+describe MacAdmin::ShadowHash do
   
   before :all do
     @lion_user = <<-USER
@@ -48,7 +48,7 @@ USER
   end
   
   describe '#create_from_user_record' do
-    subject { Password.create_from_user_record record }
+    subject { ShadowHash.create_from_user_record record }
     
     context "given a Legacy user record" do
       before do

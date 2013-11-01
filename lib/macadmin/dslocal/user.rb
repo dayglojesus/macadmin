@@ -19,15 +19,15 @@ module MacAdmin
       if @password
         self.send(:password=)
       else
-        @password = Password.create_from_user_record(self)
+        @password = ShadowHash.create_from_user_record(self)
       end
     end
     
     # Generic setter
-    # - Accepts a Password object
-    # - delegates the storage operation to the Password object itself
+    # - Accepts a ShadowHash object
+    # - delegates the storage operation to the ShadowHash object itself
     def password=(password = @password)
-      error = 'Argument was not a Password object'
+      error = 'Argument was not a ShadowHash object'
       unless password.nil? or password.respond_to? :password
         raise ArgumentError.new(error)
       end
