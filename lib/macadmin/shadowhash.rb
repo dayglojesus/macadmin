@@ -9,6 +9,8 @@ module MacAdmin
   # - common methods for password sub-classes
   class ShadowHash
     
+    include MacAdmin::Password
+    
     attr_reader :label
     
     class << self
@@ -30,13 +32,7 @@ module MacAdmin
         end
         nil
       end
-      
-      # Convert hex string to CFBlob
-      def convert_to_blob(hex)
-        ascii = hex.scan(/../).collect { |byte| byte.hex.chr }.join
-        CFPropertyList::Blob.new(ascii)
-      end
-      
+            
       # Returns Hash
       # - key: label, value: password data
       def read_shadowhashdata(data)
@@ -182,7 +178,7 @@ module MacAdmin
     # Return the ShadowHash as a ShadowHashData object
     # - Binary Plist
     def data
-      @data ||= { @label => ShadowHash.convert_to_blob(@hash) }.to_plist
+      @data ||= { @label => convert_to_blob(@hash) }.to_plist
     end
     
     # Return a Hash representation of the ShadowHash data
@@ -195,7 +191,7 @@ module MacAdmin
     # Pseudo callback for inserting a ShadowHashData object into the User object
     def store(sender)
       raise ShadowHashError.new(ShadowHashError::UNSUPPORTED_OBJECT_ERR) unless sender.is_a? MacAdmin::User
-      @data = { @label => ShadowHash.convert_to_blob(@hash) }.to_plist
+      @data = { @label => convert_to_blob(@hash) }.to_plist
       sender['ShadowHashData'] = [@data]
     end
     
@@ -293,7 +289,7 @@ module MacAdmin
         if key.to_s.eql? 'iterations'
           value = value.to_i
         else
-          value = ShadowHash.convert_to_blob value
+          value = convert_to_blob value
         end
         memo[key.to_s] = value
         memo

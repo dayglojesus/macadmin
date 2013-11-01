@@ -9,6 +9,12 @@ module MacAdmin
     
     extend self
     
+    # Convert hex string to CFBlob
+    def convert_to_blob(hex)
+      ascii = hex.scan(/../).collect { |byte| byte.hex.chr }.join
+      CFPropertyList::Blob.new(ascii)
+    end
+    
     # This method is only available in Mountain Lion or better
     if MacAdmin::Common::MAC_OS_X_PRODUCT_VERSION > 10.7
       
