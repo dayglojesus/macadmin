@@ -9,6 +9,11 @@ module MacAdmin
     
     extend self
     
+    # Convert ASCII string to hex bytes
+    def convert_to_hex(string)
+      string.unpack('H*').first
+    end
+    
     # Convert hex string to CFBlob
     def convert_to_blob(hex)
       ascii = hex.scan(/../).collect { |byte| byte.hex.chr }.join
@@ -36,7 +41,7 @@ module MacAdmin
     def salted_sha512(password)
       salt = SecureRandom.random_bytes(4)
       hash = Digest::SHA512.hexdigest(salt + password)
-      SaltedSHA512.new(MacAdmin::ShadowHash.convert_to_hex(salt) + hash)
+      SaltedSHA512.new(convert_to_hex(salt) + hash)
     end
     
     # Creates a SaltedSHA1 password from String
@@ -45,7 +50,7 @@ module MacAdmin
     def salted_sha1(password)
       salt = SecureRandom.random_bytes(4)
       hash = Digest::SHA1.hexdigest(salt + password)
-      SaltedSHA1.new((MacAdmin::ShadowHash.convert_to_hex(salt) + hash).upcase)
+      SaltedSHA1.new((convert_to_hex(salt) + hash).upcase)
     end
     
     # Create a platform appropriate password

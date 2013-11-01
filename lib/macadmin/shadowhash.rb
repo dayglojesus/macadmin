@@ -39,11 +39,7 @@ module MacAdmin
         plist = CFPropertyList::List.new(:data => data[0].to_s)
         CFPropertyList.native_types(plist.value)
       end
-      
-      def convert_to_hex(string)
-        string.unpack('H*').first
-      end
-      
+            
     end # end self
     
   end
@@ -154,7 +150,7 @@ module MacAdmin
       # - param is raw ShadowHashData object
       def create_from_shadowhashdata(data)
         value = data[SaltedSHA512::LABEL].to_s
-        hex = convert_to_hex(value)
+        hex = MacAdmin::Password.convert_to_hex(value)
         self.new(hex)
       end
       
@@ -214,7 +210,7 @@ module MacAdmin
           if key.eql? 'iterations'
             value = value.to_i
           else
-            value = convert_to_hex(value)
+            value = MacAdmin::Password.convert_to_hex(value)
           end
           memo[key.to_sym] = value
           memo
