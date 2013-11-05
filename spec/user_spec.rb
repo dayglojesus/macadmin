@@ -59,7 +59,7 @@ describe MacAdmin::User do
       before do
         subject.password = SaltedSHA512.new @sha512_string
       end
-      it { subject.instance_variable_get(:@password).should be_a_kind_of Password }
+      it { subject.instance_variable_get(:@password).should be_a_kind_of ShadowHash }
     end
     
   end
