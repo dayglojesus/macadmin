@@ -2,7 +2,7 @@
 
 Gem to assist in performing common systems administration tasks in OS X
 
-## Version: 0.0.3
+## Version: 0.0.4
 
 ## About
 
