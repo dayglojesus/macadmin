@@ -2,8 +2,6 @@
 
 Gem to assist in performing common systems administration tasks in OS X
 
-## Version: 0.0.4
-
 ## About
 
 MacAdmin endeavors to provide an OO programming interface for constituent OS X system resources. It's comprised of classes with the ability to parse Apple Property Lists (CFPropertyList) and manipulate them as native Ruby objects. The classes work directly with the Property Lists used to abstract OS X system resources -- users, groups, computers, computergroups, etc. -- bypassing the common utilities and APIs normally reserved for this kind of work.
