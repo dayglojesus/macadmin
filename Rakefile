@@ -40,18 +40,24 @@ namespace :macadmin do
   task :bump_version_patch do
     MacAdmin::VERSION.bump_patch
     MacAdmin::VERSION.save
+    `git add ./version.yaml`
+    `git commit -m "bump patch version, #{MacAdmin::VERSION.to_s}"`
   end
   
   desc "Bump the minor version number"
   task :bump_version_minor do
     MacAdmin::VERSION.bump_minor
     MacAdmin::VERSION.save
+    `git add ./version.yaml`
+    `git commit -m "bump minor version, #{MacAdmin::VERSION.to_s}"`
   end
   
   desc "Bump the major version number"
   task :bump_version_major do
     MacAdmin::VERSION.bump_major
     MacAdmin::VERSION.save
+    `git add ./version.yaml`
+    `git commit -m "bump major version, #{MacAdmin::VERSION.to_s}"`
   end
   
 end
