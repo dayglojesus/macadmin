@@ -29,7 +29,7 @@ namespace :macadmin do
   desc "Cleans out any elements of the gem build compile process"
   task :clean do
     require 'fileutils'
-    files = ["./lib/macadmin/password", "./tmp", "./pkg"]
+    files = ["./lib/macadmin/password", "./tmp", "./pkg", "./vendor"]
     files.each do |obj|
       FileUtils.rm_rf(File.expand_path(obj))
     end
