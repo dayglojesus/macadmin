@@ -23,6 +23,7 @@ RSpec::Core::RakeTask.new
 task :default => :spec
 task :test => :spec
 
+# macadmin tasks
 namespace :macadmin do
   
   desc "Cleans out any elements of the gem build compile process"
@@ -34,31 +35,23 @@ namespace :macadmin do
     end
   end
   
-end
-
-# Version handling tasks
-namespace :version do
+  # Version handling tasks
+  desc "Bump the patch version number"
+  task :bump_version_patch do
+    MacAdmin::VERSION.bump_patch
+    MacAdmin::VERSION.save
+  end
   
-  namespace :bump do
-    
-    desc "Bump the patch version number"
-    task :patch do
-      MacAdmin::VERSION.bump_patch
-      MacAdmin::VERSION.save
-    end
-    
-    desc "Bump the minor version number"
-    task :minor do
-      MacAdmin::VERSION.bump_minor
-      MacAdmin::VERSION.save
-    end
-    
-    desc "Bump the major version number"
-    task :major do
-      MacAdmin::VERSION.bump_major
-      MacAdmin::VERSION.save
-    end
-    
+  desc "Bump the minor version number"
+  task :bump_version_minor do
+    MacAdmin::VERSION.bump_minor
+    MacAdmin::VERSION.save
+  end
+  
+  desc "Bump the major version number"
+  task :bump_version_major do
+    MacAdmin::VERSION.bump_major
+    MacAdmin::VERSION.save
   end
   
 end
