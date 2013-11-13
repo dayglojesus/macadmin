@@ -23,6 +23,19 @@ RSpec::Core::RakeTask.new
 task :default => :spec
 task :test => :spec
 
+namespace :macadmin do
+  
+  desc "Cleans out any elements of the gem build compile process"
+  task :clean do
+    require 'fileutils'
+    files = ["./lib/macadmin/password", "./tmp", "./pkg"]
+    files.each do |obj|
+      FileUtils.rm_rf(File.expand_path(obj))
+    end
+  end
+  
+end
+
 # Version handling tasks
 namespace :version do
   
