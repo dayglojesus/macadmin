@@ -1,5 +1,7 @@
 # MacAdmin
 
+[![Gem Version](https://badge.fury.io/rb/macadmin.png)](http://badge.fury.io/rb/macadmin)
+
 Gem to assist in performing common systems administration tasks in OS X
 
 ## About
