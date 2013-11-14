@@ -21,10 +21,19 @@ end
 RSpec::Core::RakeTask.new
 
 task :default => :spec
-task :test => :spec
+task :test    => :spec
 
 # macadmin tasks
 namespace :macadmin do
+  
+  desc "Fix permissions on Gem"
+  task :fix_perms do
+    require 'find'
+    Find.find(File.expand_path("./")) do |path|
+      FileUtils.chmod(0755, path) if FileTest.directory?(path)
+      FileUtils.chmod(0644, path) if FileTest.file?(path)
+    end
+  end
   
   desc "Cleans out any elements of the gem build compile process"
   task :clean do
