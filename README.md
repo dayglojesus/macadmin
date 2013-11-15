@@ -1,8 +1,8 @@
+[![Gem Version](https://badge.fury.io/rb/macadmin.png)](http://badge.fury.io/rb/macadmin) [![Code Climate](https://codeclimate.com/github/dayglojesus/macadmin.png)](https://codeclimate.com/github/dayglojesus/macadmin)
+
 # MacAdmin
 
 Gem to assist in performing common systems administration tasks in OS X
-
-## Version: 0.0.4
 
 ## About
 

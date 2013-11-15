@@ -5,7 +5,7 @@ require 'macadmin/version'
 
 Gem::Specification.new do |s|
   s.name          = "macadmin"
-  s.version       = MacAdmin::VERSION
+  s.version       = MacAdmin::VERSION.to_s
   s.date          = '2012-07-08'
   s.authors       = ["Brian Warsing"]
   s.email         = ['dayglojesus@gmail.com']
