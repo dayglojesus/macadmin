@@ -26,6 +26,9 @@ task :test    => :spec
 # macadmin tasks
 namespace :macadmin do
   
+  desc "Publish the macadmin gem"
+  task :publish => [:fix_perms, :release]
+  
   desc "Fix permissions on Gem"
   task :fix_perms do
     require 'find'
