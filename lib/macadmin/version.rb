@@ -6,7 +6,7 @@ module MacAdmin
     
     require 'yaml'
     
-    FILE = File.expand_path('version.yaml')
+    FILE = File.expand_path('../../../version.yaml', __FILE__)
     
     attr_accessor :major, :minor, :patch
     
