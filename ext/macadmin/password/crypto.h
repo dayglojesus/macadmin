@@ -5,7 +5,7 @@
  *
  *  Created by Brian Warsing on 2013-10-07.
  *  Copyright (c) 2013 Brian Warsing. All rights reserved.
-*/
+ */
 
 #include <stdio.h>
 #include <stdint.h>
