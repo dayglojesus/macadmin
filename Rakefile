@@ -4,7 +4,7 @@ require "macadmin/common"
 require "macadmin/version"
 require "rake/extensiontask"
 
-# Only build the extension for Mountian Lion or better
+# Only build the crypto extension for Mountain Lion or better
 if MacAdmin::Common::MAC_OS_X_PRODUCT_VERSION > 10.7
   
   Rake::ExtensionTask.new "crypto" do |ext|
@@ -13,6 +13,13 @@ if MacAdmin::Common::MAC_OS_X_PRODUCT_VERSION > 10.7
     ext.ext_dir = 'ext/macadmin/password'
   end
   
+end
+
+# Build the corefoundation extension
+Rake::ExtensionTask.new "corefoundation" do |ext|
+  ext.lib_dir = 'lib/macadmin'
+  ext.name    = 'corefoundation'
+  ext.ext_dir = 'ext/macadmin/corefoundation'
 end
 
 Rake::Task[:spec].prerequisites << :compile
@@ -40,7 +47,9 @@ namespace :macadmin do
   desc "Cleans out any elements of the gem build compile process"
   task :clean do
     require 'fileutils'
-    files = ["./lib/macadmin/password", "./tmp", "./pkg", "./vendor"]
+    files = ["./lib/macadmin/password",
+             "./lib/macadmin/corefoundation.bundle",
+             "./tmp", "./pkg", "./vendor"]
     files.each do |obj|
       FileUtils.rm_rf(File.expand_path(obj))
     end
