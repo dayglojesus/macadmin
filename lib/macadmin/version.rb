@@ -27,13 +27,17 @@ module MacAdmin
     end
     
     # Increment the major version number
+    # - resets patch to zero
     def bump_major
       @major += 1
+      @patch = 0
     end
     
     # Increment the minor version number
+    # - resets patch to zero
     def bump_minor
       @minor += 1
+      @patch = 0
     end
     
     # Increment the patch version number
