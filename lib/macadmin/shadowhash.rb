@@ -44,7 +44,7 @@ module MacAdmin
     
   end
   
-  # Legacy ShadowHashs
+  # Legacy ShadowHash
   # - password management for Mac OS X 10.6 and below
   # - passwords are managed in separate files in /var/db/shadow/hash
   class SaltedSHA1 < ShadowHash
@@ -135,7 +135,7 @@ module MacAdmin
     
   end
   
-  # Lion ShadowHashs
+  # Lion ShadowHash
   # - Mac OS X 10.7 store passwords as Salted SHA512 hashes
   # - hash is stored directly in the user's plist
   class SaltedSHA512 < ShadowHash
