@@ -32,6 +32,13 @@ module MacAdmin
       @definition = normalize(hash)
     end
     
+    # Does the specified resource already exist?
+    # - returns Boolean
+    def exists?
+      @real = Authorization.get_authorization_right(@name)
+      @definition.eql? @real
+    end
+    
     private
     
     # validate
