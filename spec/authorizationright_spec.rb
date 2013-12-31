@@ -76,4 +76,24 @@ describe MacAdmin::AuthorizationRight do
     end
   end
   
+  describe '#exists?' do
+    
+    context "when the object is different from its associated record" do
+      subject { AuthorizationRight.new 'system.preferences', :group => "everyone" }
+      it { subject.exists?.should be_false } 
+    end
+    
+    context "when the object is identical to its associated file" do
+      subject { AuthorizationRight.new  "system.preferences", 
+                                        "allow-root" => true,
+                                        "authenticate-user" => true,
+                                        "shared" => true,
+                                        "group" => "admin",
+                                        "class" => "user",
+                                        "session-owner" => false }
+      it { subject.exists?.should be_true }
+    end
+    
+  end
+  
 end
