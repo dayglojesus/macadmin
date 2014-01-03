@@ -3,14 +3,14 @@ require 'macadmin/common'
 
 describe MacAdmin::AuthorizationRight do
   
-  describe 'AUTHORIZATION_DB_DEFAULTS' do
+  describe "AUTHORIZATION_DB_DEFAULTS" do
     it 'is an OS X Property List file' do
       location = MacAdmin::AuthorizationRight::AUTHORIZATION_DB_DEFAULTS
       MacAdmin::Common.load_plist(location).should_not be_nil
     end
   end
   
-  describe '#new' do
+  describe "#new" do
     
     context 'throws an ArgumentError when given fewer than 1 params' do
       subject { AuthorizationRight.new }
@@ -76,7 +76,7 @@ describe MacAdmin::AuthorizationRight do
     end
   end
   
-  describe '#exists?' do
+  describe "#exists?" do
     
     context "when the object is different from its associated record" do
       subject { AuthorizationRight.new 'system.preferences', :group => "everyone" }
@@ -92,6 +92,14 @@ describe MacAdmin::AuthorizationRight do
                                         "class" => "user",
                                         "session-owner" => false }
       it { subject.exists?.should be_true }
+    end
+    
+  end
+  
+  describe "#create" do
+    
+    it "returns true when the record is created successfully" do
+      AuthorizationRight.new('foo.bar', :group => "everyone").create.should be_true
     end
     
   end
