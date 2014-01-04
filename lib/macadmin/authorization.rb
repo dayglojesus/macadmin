@@ -82,6 +82,16 @@ module MacAdmin
       @definition.eql? @real
     end
     
+    # Destroy the right in the OS X Authorization database
+    # - returns true if successful, false otherwise
+    # - sets @status using AuthorizationStatus object
+    def destroy
+      result  = Authorization.rm_authorization_right @name
+      @status = AuthorizationStatus.new result
+      return false unless result == 0
+      true
+    end
+    
     private
     
     # validate
