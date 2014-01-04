@@ -104,4 +104,12 @@ describe MacAdmin::AuthorizationRight do
     
   end
   
+  describe "#destroy" do
+    
+    it "returns true when the record is destroyed successfully" do
+      AuthorizationRight.new('foo.bar', :group => "everyone").destroy.should be_true
+    end
+    
+  end
+  
 end
