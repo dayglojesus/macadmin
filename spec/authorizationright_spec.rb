@@ -10,6 +10,14 @@ describe MacAdmin::AuthorizationRight do
     end
   end
   
+  describe "#default_rules" do
+    
+    it "should return a Hash" do
+      AuthorizationRight.default_rules('system.preferences').should be_an_instance_of Hash
+    end
+    
+  end
+  
   describe "#new" do
     
     context 'throws an ArgumentError when given fewer than 1 params' do
