@@ -49,6 +49,16 @@ module MacAdmin
     
     attr_reader :name, :definition, :status
     
+    class << self
+      
+      # Returns a hash containing the default rules for right 'name'
+      def default_rules(name)
+        defaults = MacAdmin::Common.load_plist(AUTHORIZATION_DB_DEFAULTS)
+        defaults["rights"][name]
+      end
+      
+    end
+    
     def initialize(name, definition = {})
       validate(name, definition)
       @name = name
