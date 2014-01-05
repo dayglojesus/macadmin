@@ -120,4 +120,28 @@ describe MacAdmin::AuthorizationRight do
     
   end
   
+  describe "#load_defaults" do
+    
+    context "when the right exists in the AUTHORIZATION_DB_DEFAULTS" do
+      
+      it "loads the default rules for the right" do
+        right = AuthorizationRight.new 'system.preferences', { :group => "everyone" }
+        right.load_defaults
+        right.definition["group"].should eq "admin"
+      end
+      
+    end
+    
+    context "when the right does not exist in AUTHORIZATION_DB_DEFAULTS" do
+      
+      it "leaves the existing definition alone" do
+        right = AuthorizationRight.new 'bar.baz', { :group => "everyone" }
+        right.load_defaults
+        right.definition["group"].should eq "everyone"
+      end
+      
+    end
+    
+  end
+  
 end
