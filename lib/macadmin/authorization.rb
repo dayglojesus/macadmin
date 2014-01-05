@@ -102,6 +102,14 @@ module MacAdmin
       true
     end
     
+    # Loads the default rules for the right, if they exist
+    # - only applies to rights defined by Apple
+    # - if there are no default rules, it does nothing
+    def load_defaults
+      rules = AuthorizationRight.default_rules @name
+      @definition = rules if rules
+    end
+    
     private
     
     # validate
